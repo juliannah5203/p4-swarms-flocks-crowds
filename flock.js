@@ -90,6 +90,7 @@ Boid.prototype.run = function(boids) {
   this.update();
   // this.borders();
   this.renderBoy();
+  
   // this.renderGirl();
 }
 
@@ -119,6 +120,8 @@ Boid.prototype.flock = function(boids) {
   this.applyForce(avo);
   this.applyForce(att);
 
+
+
  
 }
 
@@ -131,6 +134,7 @@ Boid.prototype.update = function() {
   this.position.add(this.velocity);
   // Reset accelertion to 0 each cycle
   this.acceleration.mult(0);
+
 }
 
 // A method that calculates and applies a steering force towards a target
@@ -282,6 +286,7 @@ Boid.prototype.attract = function(boids) {
   var m = createVector(315, 160);
   var d = p5.Vector.dist(this.position, m);
   if ((d > 0) && (d < neighbordist)) {
+
     return this.seek(m); // Steer towards the mouse location 
   } else {
     return createVector(0, 0);
