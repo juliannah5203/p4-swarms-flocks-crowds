@@ -2,18 +2,42 @@ let flock;
 
 function setup() {
   createCanvas(640, 360);
+  
   createP("Drag the mouse to generate new boids.");
 
   flock = new Flock();
   // Add an initial set of boids into the system
   for (let i = 0; i < 10; i++) {
-    let b = new Boid(width / 2,height / 2);
+    let b = new Boid(0,0);
     flock.addBoid(b);
+    // let c = new Boid(width, 0);
+    // flock.addBoid(c);
   }
 }
 
 function draw() {
-  background(51);
+  background(0);
+  
+  noStroke();
+  push();
+  fill(200,200,200);
+  beginShape();
+  vertex(320-40, 180);
+  vertex(320-40, 360);
+  vertex(320+40, 360);
+  vertex(320+40, 180);
+
+  endShape(CLOSE);
+  pop();
+  strokeWeight(2);
+  stroke(0);
+  fill(255,255,255);
+  ellipse(320,180,90,32);
+  
+  fill(150,150,150);
+  ellipse(320,180,75,25);
+
+  
   flock.run();
 }
 
@@ -116,17 +140,42 @@ Boid.prototype.seek = function(target) {
 
 Boid.prototype.render = function() {
   // Draw a triangle rotated in the direction of velocity
-  let theta = this.velocity.heading() + radians(90);
-  fill(127);
-  stroke(200);
+  // let theta = this.velocity.heading() + radians(90);
+  // fill(127);
+  // stroke(200);
   push();
   translate(this.position.x, this.position.y);
-  rotate(theta);
+  // rotate(theta);
+  // beginShape();
+  // vertex(0, -this.r * 2);
+  // vertex(-this.r, this.r * 2);
+  // vertex(this.r, this.r * 2);
+
+  // endShape(CLOSE);
+
+  noStroke();
+
+  fill(255);
   beginShape();
-  vertex(0, -this.r * 2);
-  vertex(-this.r, this.r * 2);
-  vertex(this.r, this.r * 2);
-  endShape(CLOSE);
+  vertex(1,9);
+  vertex(11, 9);
+  vertex(13,19);
+  vertex(-1,19);
+  endShape();
+
+  fill(127);
+  circle(6,4,8);
+
+  beginShape();
+  vertex(2,8);
+  vertex(10, 8);
+  vertex(11,20);
+  vertex(1,20);
+  endShape();
+
+  rect(3,20,2,6);
+  rect(7,20,2,6);
+
   pop();
 }
 
@@ -136,6 +185,7 @@ Boid.prototype.borders = function() {
   if (this.position.y < -this.r)  this.position.y = height + this.r;
   if (this.position.x > width + this.r) this.position.x = -this.r;
   if (this.position.y > height + this.r) this.position.y = -this.r;
+
 }
 
 // Separation
@@ -233,5 +283,16 @@ Boid.prototype.avoid = function(boids) {
   if (this.position.y > 360) { // height of canvas
     steer.add(createVector(0, -1));
   }
+  // if (this.position.x >= 280 && this.position.x <= 320) {
+    if(this.position.x >= 280 && this.position.y >= 180){
+      steer.add(createVector(-1,0));
+      steer.add(createVector(0,1));
+    }
+
+  // }
+
+
   return steer;
 }
+
+
