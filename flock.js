@@ -10,8 +10,8 @@ function setup() {
   for (let i = 0; i < 10; i++) {
     let b = new Boid(0,0);
     flock.addBoid(b);
-    // let c = new Boid(width, 0);
-    // flock.addBoid(c);
+    let c = new Boid(width, 0);
+    flock.addBoid(c);
   }
 }
 
@@ -283,13 +283,21 @@ Boid.prototype.avoid = function(boids) {
   if (this.position.y > 360) { // height of canvas
     steer.add(createVector(0, -1));
   }
-  // if (this.position.x >= 280 && this.position.x <= 320) {
-    if(this.position.x >= 280 && this.position.y >= 180){
-      steer.add(createVector(-1,0));
-      steer.add(createVector(0,1));
-    }
 
-  // }
+
+  if(this.position.y > 150){
+    if(this.position.x > 260 && this.position.x < 370){
+      steer.add(createVector(0,-1));
+      if(this.position.x > 260){
+        steer.add(createVector(-1,0));
+
+      }
+      if(this.position.x < 370){
+        steer.add(createVector(1,0));
+      }
+    }
+  }
+
 
 
   return steer;
