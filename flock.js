@@ -80,7 +80,7 @@ function Boid(x, y) {
   this.acceleration = createVector(0, 0);
   this.velocity = createVector(random(-1, 1), random(-1, 1));
   this.position = createVector(x, y);
-  this.r = 3.0;
+  this.r = 15.0;
   this.maxspeed = 3;    // Maximum speed
   this.maxforce = 0.05; // Maximum steering force
 }
@@ -104,16 +104,22 @@ Boid.prototype.flock = function(boids) {
   let ali = this.align(boids);      // Alignment
   let coh = this.cohesion(boids);   // Cohesion
   let avo = this.avoid(boids);      // Avoid walls
+  let att = this.attract(boids);
+
   // Arbitrarily weight these forces
-  sep.mult(10.0);
+  sep.mult(5.0);
   ali.mult(2.0);
   coh.mult(1.0);
   avo.mult(3.0);
+  att.mult(10.0);
   // Add the force vectors to acceleration
   this.applyForce(sep);
   this.applyForce(ali);
   this.applyForce(coh);
   this.applyForce(avo);
+  this.applyForce(att);
+
+ 
 }
 
 // Method to update location
@@ -179,43 +185,7 @@ Boid.prototype.renderBoy = function() {
   pop();
 }
 
-// Boid.prototype.renderGirl = function() {
-//   // Draw a triangle rotated in the direction of velocity
-//   // let theta = this.velocity.heading() + radians(90);
-//   // fill(127);
-//   // stroke(200);
-//   push();
-//   translate(this.position.x, this.position.y);
 
-
-//   noStroke();
-
-//   fill(255,182,193);
-//   circle(6,4,8);
-
-//   fill(255);
-//   beginShape();
-//   vertex(1,9);
-//   vertex(11, 9);
-//   vertex(13,19);
-//   vertex(-1,19);
-//   endShape();
-
-//   fill(127);
-
-
-//   beginShape();
-//   vertex(2,8);
-//   vertex(10, 8);
-//   vertex(11,20);
-//   vertex(1,20);
-//   endShape();
-
-//   rect(3,20,2,6);
-//   rect(7,20,2,6);
-
-//   pop();
-// }
 
 // Wraparound
 Boid.prototype.borders = function() {
@@ -307,6 +277,19 @@ Boid.prototype.cohesion = function(boids) {
   }
 }
 
+Boid.prototype.attract = function(boids) {
+  var neighbordist = 50;
+  var m = createVector(315, 160);
+  var d = p5.Vector.dist(this.position, m);
+  if ((d > 0) && (d < neighbordist)) {
+    return this.seek(m); // Steer towards the mouse location 
+  } else {
+    return createVector(0, 0);
+  }
+}
+
+
+
 Boid.prototype.avoid = function(boids) {
   let steer = createVector(0, 0);
   if (this.position.x <= 0) {
@@ -325,12 +308,14 @@ Boid.prototype.avoid = function(boids) {
 
   if(this.position.y > 150){
     if(this.position.x > 260 && this.position.x < 370){
-      steer.add(createVector(0,-1));
+      // steer.add(createVector(0,-1));
       if(this.position.x > 260){
+        steer.add(createVector(0,-1));
         steer.add(createVector(-1,0));
 
       }
       if(this.position.x < 370){
+        steer.add(createVector(0,-1));
         steer.add(createVector(1,0));
       }
     }
@@ -346,7 +331,7 @@ function Boid1(x, y) {
   this.acceleration = createVector(0, 0);
   this.velocity = createVector(random(-1, 1), random(-1, 1));
   this.position = createVector(x, y);
-  this.r = 3.0;
+  this.r = 15.0;
   this.maxspeed = 3;    // Maximum speed
   this.maxforce = 0.05; // Maximum steering force
 }
@@ -370,16 +355,20 @@ Boid1.prototype.flock = function(boids) {
   let ali = this.align(boids);      // Alignment
   let coh = this.cohesion(boids);   // Cohesion
   let avo = this.avoid(boids);      // Avoid walls
+  let att = this.attract(boids);
   // Arbitrarily weight these forces
-  sep.mult(10.0);
+  sep.mult(5.0);
   ali.mult(2.0);
   coh.mult(1.0);
   avo.mult(3.0);
+  att.mult(10.0);
+
   // Add the force vectors to acceleration
   this.applyForce(sep);
   this.applyForce(ali);
   this.applyForce(coh);
   this.applyForce(avo);
+  this.applyForce(att);
 }
 
 // Method to update location
@@ -406,44 +395,9 @@ Boid1.prototype.seek = function(target) {
   return steer;
 }
 
-// Boid.prototype.renderBoy = function() {
-//   // Draw a triangle rotated in the direction of velocity
-//   // let theta = this.velocity.heading() + radians(90);
-//   // fill(127);
-//   // stroke(200);
-//   push();
-//   translate(this.position.x, this.position.y);
 
 
-//   noStroke();
 
-//   fill(173,216,230);
-
-//   circle(6,4,8);
-
-//   fill(255);
-//   beginShape();
-//   vertex(1,9);
-//   vertex(11, 9);
-//   vertex(11,19);
-//   vertex(1,19);
-//   endShape();
-
-//   fill(127);
-
-
-//   beginShape();
-//   vertex(2,8);
-//   vertex(10, 8);
-//   vertex(10,20);
-//   vertex(2,20);
-//   endShape();
-
-//   rect(3,20,2,6);
-//   rect(7,20,2,6);
-
-//   pop();
-// }
 
 Boid1.prototype.renderGirl = function() {
   // Draw a triangle rotated in the direction of velocity
@@ -573,6 +527,18 @@ Boid1.prototype.cohesion = function(boids) {
   }
 }
 
+
+Boid1.prototype.attract = function(boids) {
+  var neighbordist = 50;
+  var m = createVector(315, 160);
+  var d = p5.Vector.dist(this.position, m);
+  if ((d > 0) && (d < neighbordist)) {
+    return this.seek(m); // Steer towards the mouse location 
+  } else {
+    return createVector(0, 0);
+  }
+}
+
 Boid1.prototype.avoid = function(boids) {
   let steer = createVector(0, 0);
   if (this.position.x <= 0) {
@@ -591,14 +557,17 @@ Boid1.prototype.avoid = function(boids) {
 
   if(this.position.y > 150){
     if(this.position.x > 260 && this.position.x < 370){
-      steer.add(createVector(0,-1));
+      // steer.add(createVector(0,-1));
       if(this.position.x > 260){
+        steer.add(createVector(0,-1));
         steer.add(createVector(-1,0));
 
       }
       if(this.position.x < 370){
+        steer.add(createVector(0,-1));
         steer.add(createVector(1,0));
       }
+    
     }
   }
 
