@@ -2,8 +2,10 @@ let flock;
 
 function setup() {
   createCanvas(640, 360);
+
   
-  createP("Drag the mouse to generate new boids.");
+  
+  createP("Click and Drag with your mouse to generate new avatars.");
 
   flock = new Flock();
   // Add an initial set of boids into the system
@@ -12,6 +14,10 @@ function setup() {
     flock.addBoid(b);
     let c = new Boid1(width, 0);
     flock.addBoid(c);
+    let a = new Boid(width, height);
+    flock.addBoid(a);
+    let d = new Boid1(0, height);
+    flock.addBoid(d);
   }
 }
 
@@ -319,7 +325,7 @@ Boid.prototype.avoid = function(boids) {
         steer.add(createVector(-1,0));
 
       }
-      if(this.position.x < 370){
+      if(this.position.x < 368){
         steer.add(createVector(0,-1));
         steer.add(createVector(1,0));
       }
@@ -568,7 +574,7 @@ Boid1.prototype.avoid = function(boids) {
         steer.add(createVector(-1,0));
 
       }
-      if(this.position.x < 370){
+      if(this.position.x < 368){
         steer.add(createVector(0,-1));
         steer.add(createVector(1,0));
       }
